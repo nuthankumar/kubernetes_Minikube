@@ -1,0 +1,43 @@
+===reference if needed=======
+https://www.bogotobogo.com/DevOps/DevOps-Kubernetes-1-Running-Kubernetes-Locally-via-Minikube.php
+
+
+====Other commands if useful====
+minikube start --cpus=2 --memory=4096 --kubernetes-version=v1.9.2 --bootstrapper=kubeadm
+minikube start --cpus 4 --memory 4096 --kubernetes-version v1.7.7 --vm-driver kvm --bootstrapper kubeadm --disk-size 40g  --hyperv-virtual-switch="NATSwitch" --v=7 --alsologtostderr
+minikube start --kubernetes-version v1.8.0 --bootstrapper kubeadm
+minikube config set WantUpdateNotification false
+minikube version
+minikube ip
+minikube ssh
+minikube dashboard
+minikube service list
+minikube ssh "docker ps -a"
+
+
+====Create a virtual switch for windows to use the internet of the machine=====
+minikube start --cpus 4 --memory 4096 --kubernetes-version v1.10.0 --vm-driver=hyperv --hyperv-virtual-switch=minikube
+
+
+====Commands to make network access for creating clusters======
+[Environment]::SetEnvironmentVariable("KUBECONFIG", $HOME + "\.kube\config", [EnvironmentVariableTarget]::Machine)
+[Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://proxy.example.com:80/", [EnvironmentVariableTarget]::Machine)
+[Environment]::SetEnvironmentVariable("HTTPS_PROXY", "http://proxy.example.com:443/", [EnvironmentVariableTarget]::Machine)
+minicube ssh
+$ sudo ifconfig eth0 192.168.29.254 netmask 255.255.240.0
+$ sudo route add default gw 192.168.30.71 eth0
+$ route -n
+
+====Exit it ctrl+c and run it again after the above commands======
+minikube start --cpus 4 --memory 4096 --kubernetes-version v1.10.0 --vm-driver=hyperv --hyperv-virtual-switch=minikube --extra-config=controller-manager.ClusterSigningCertFile="$(pwd)/ca.crt" --extra-config=controller-manager.ClusterSigningKeyFile="$(pwd)/ca.key"
+minikube get-k8s-versions
+
+====views for dashboard ===
+https://192.168.29.254:8443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+
+====Working with pods ======
+kubectl run echo --image=gcr.io/google_containers/echoserver:1.4 --port=8080 deployment "echo" created 
+kubectl expose deployment echo --type=NodePort 
+kubectl get deployments
+kubectl delete deployment prometheus-adapter-0-2-1-client --force --grace-period=0
