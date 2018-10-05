@@ -1,0 +1,45 @@
+===get all the updates=====
+sudo apt-get update -y
+sudo apt-get upgrade -y
+=====add repository for java =====
+sudo add-apt-repository -y ppa:webupd8team/java
+
+====get an update =====
+sudo apt-get update
+====Install java for kafka ====
+sudo apt-get install oracle-java8-installer -y
+====check java version =======
+sudo java -version
+====Install zookeeper====
+sudo apt-get install zookeeperd
+====check for zookeeper running===
+netstat -ant | grep :2181
+====get apache kafka from mirror==== (this being the latest)
+wget http://mirrors.fibergrid.in/apache/kafka/2.0.0/kafka_2.11-2.0.0.tgz
+====make a directory and unzip kafka there =====
+sudo mkdir /opt/Kafka
+cd /opt/Kafka
+sudo tar -xvf kafka_2.11-2.0.0.tgz -C /opt/Kafka/
+====start kafka server =======
+sudo  /opt/Kafka/kafka_2.11-2.0.0/bin/kafka-server-start.sh /opt/Kafka/kafka_2.11-2.0.0/config/server.properties
+
+====create a topic for messaging ======
+sudo /opt/Kafka/kafka_2.11-2.0.0/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1  --partitions 1 --topic testing
+=====list all the topics for zookeeper ====
+sudo /opt/Kafka/kafka_2.11-2.0.0/bin/kafka-topics.sh --list --zookeeper localhost:2181
+====run the producer in console=====
+sudo /opt/Kafka/kafka_2.11-2.0.0/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic testing
+====run consumer in console====
+sudo /opt/Kafka/kafka_2.11-2.0.0/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic testing --from-beginning
+
+
+
+=====If anything is not install right use these ====
+
+sudo apt install gradle
+gradle -v
+chmod +x gradle
+gradle wrapper
+./gradlew jar -PscalaVersion=2.11.12
+sudo apt-get update
+./gradlew tasks
